@@ -25,9 +25,11 @@ Parameters:
   AlertingModule:
     Description: 'Optional but recommended stack name of alerting module.'
     Type: String
+    Default: ''
   BastionModule:
     Description: 'Optional but recommended stack name of module implementing Bastion.'
     Type: String
+    Default: ''
   EngineVersion:
     Description: 'Redis version'
     Type: String
