@@ -94,7 +94,7 @@ Resources:
   ReplicationGroup:
     DeletionPolicy: Snapshot
     UpdateReplacePolicy: Snapshot
-    Type: AWS::ElastiCache::ReplicationGroup
+    Type: 'AWS::ElastiCache::ReplicationGroup'
     Properties:
       ReplicationGroupDescription: !Ref 'AWS::StackName'
       AtRestEncryptionEnabled: true
