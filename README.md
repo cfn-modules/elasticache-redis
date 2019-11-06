@@ -119,5 +119,5 @@ none
 ## Limitations
 
 * Secure: Does not backup/snapshot the cached data
-* Scalable: RDS instances capacity (CPU, RAM, network, ...) is limited by design
+* Scalable: Cache instances capacity (CPU, RAM, network, ...) is limited by design
 * Monitoring: Network In+Out is not monitored according to capacity of instance type
