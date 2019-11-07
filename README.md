@@ -3,7 +3,7 @@
 
 # cfn-modules: ElastiCache redis
 
-ElastiCache redis cluster with secure firewall configuration, encryption, multi AZ, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
+ElastiCache redis cluster with secure firewall configuration, [encryption](https://www.npmjs.com/package/@cfn-modules/kms-key), multi AZ, backup enabled, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
 
 ## Install
 
@@ -28,10 +28,12 @@ Resources:
         ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName' # required
         AlertingModule: '' # optional
         BastionModule: '' # optional
+        KmsKeyModule: '' # optional
         EngineVersion: '5.0.5' # optional
         CacheNodeType: 'cache.t2.micro' # optional
-        TransitEncryption: 'true' # optional
         AuthToken: '' # optional
+        SnapshotRetentionLimit: '35' # optional
+        SnapshotName: '' # optional
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'
 ```
 
@@ -85,6 +87,13 @@ none
       <td></td>
     </tr>
     <tr>
+      <td>KmsKeyModule</td>
+      <td>Stack name of <a href="https://www.npmjs.com/package/@cfn-modules/kms-key">kms-key module</a></td>
+      <td></td>
+      <td>no</td>
+      <td></td>
+    </tr>
+    <tr>
       <td>EngineVersion</td>
       <td>Redis version</td>
       <td>5.0.5</td>
@@ -99,17 +108,23 @@ none
       <td></td>
     </tr>
     <tr>
-      <td>TransitEncryption</td>
-      <td>Enable encryption for data in transit? When transit encryption is enabled also specify an auth token</td>
-      <td>true</td>
+      <td>AuthToken</td>
+      <td>Password (16 to 128 characters) used to authenticate against Redis (leave blank to disable password-protection)</td>
+      <td></td>
       <td>no</td>
-      <td>[true, false]</td>
+      <td></td>
     </tr>
     <tr>
+      <td>SnapshotRetentionLimit</td>
+      <td>The number of days for which ElastiCache retains automatic snapshots before deleting them (set to 0 to disable backups)</td>
+      <td>35</td>
+      <td>no</td>
+      <td>[0...35]</td>
+    </tr>
     <tr>
-      <td>AuthToken</td>
-      <td>Password (16 to 128 characters) used to authenticate against Redis. Requried when TransitEncryption = true. Leave blank to disable password-protection.</td>
-      <td>auto generated value</td>
+      <td>SnapshotName</td>
+      <td>Name of a snapshot from which you want to restore (leave blank to create an empty cache)</td>
+      <td></td>
       <td>no</td>
       <td></td>
     </tr>
@@ -118,6 +133,5 @@ none
 
 ## Limitations
 
-* Secure: Does not backup/snapshot the cached data
 * Scalable: Cache instances capacity (CPU, RAM, network, ...) is limited by design
 * Monitoring: Network In+Out is not monitored according to capacity of instance type

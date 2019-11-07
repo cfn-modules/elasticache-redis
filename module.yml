@@ -30,6 +30,10 @@ Parameters:
     Description: 'Optional but recommended stack name of module implementing Bastion.'
     Type: String
     Default: ''
+  KmsKeyModule:
+    Description: 'Optional but recommended stack name of kms-key module (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
+    Type: String
+    Default: ''
   EngineVersion:
     Description: 'Redis version'
     Type: String
@@ -40,22 +44,27 @@ Parameters:
     Description: 'The compute and memory capacity of the nodes in the node group (shard).'
     Type: 'String'
     Default: 'cache.t2.micro'
-  TransitEncryption:
-    Description: 'Enable encryption for data in transit? When transit encryption is enabled also specify an auth token.'
-    Type: 'String'
-    Default: 'true'
-    AllowedValues:
-    - 'true'
-    - 'false'
   AuthToken:
-    Description: 'Password (16 to 128 characters) used to authenticate against Redis. Requried when TransitEncryption = true. Leave blank to disable password-protection.'
+    Description: 'Optional password (16 to 128 characters) used to authenticate against Redis (leave blank to disable password-protection).'
     Type: 'String'
     Default: ''
     MaxLength: 128
+  SnapshotRetentionLimit:
+    Description: 'The number of days for which ElastiCache retains automatic snapshots before deleting them (set to 0 to disable backups).'
+    Type: Number
+    Default: 35
+    MinValue: 0
+    MaxValue: 35
+  SnapshotName:
+    Description: 'Optional name of a snapshot from which you want to restore (leave blank to create an empty cache).'
+    Type: 'String'
+    Default: ''
 Conditions:
   HasAlertingModule: !Not [!Equals [!Ref AlertingModule, '']]
   HasBastionModule: !Not [!Equals [!Ref BastionModule, '']]
+  HasKmsKeyModule: !Not [!Equals [!Ref KmsKeyModule, '']]
   HasAuthToken: !Not [!Equals [!Ref AuthToken, '']]
+  HasSnapshotName: !Not [!Equals [!Ref SnapshotName, '']]
 Mappings:
   EngineVersionMap:
     '5.0.5':
@@ -105,15 +114,17 @@ Resources:
       CacheSubnetGroupName: !Ref CacheSubnetGroupName
       Engine: redis
       EngineVersion: !Ref EngineVersion
+      KmsKeyId: !If [HasKmsKeyModule, {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}, !Ref 'AWS::NoValue']
       NotificationTopicArn: !If [HasAlertingModule, {'Fn::ImportValue': !Sub '${AlertingModule}-Arn'}, !Ref 'AWS::NoValue']
       NumNodeGroups: 1
       ReplicasPerNodeGroup: 1
       PreferredMaintenanceWindow: 'sat:07:00-sat:08:00'
       SecurityGroupIds:
       - !Ref SecurityGroup
-      SnapshotRetentionLimit: 35
+      SnapshotName: !If [HasSnapshotName, !Ref SnapshotName, !Ref 'AWS::NoValue']
+      SnapshotRetentionLimit: !Ref SnapshotRetentionLimit
       SnapshotWindow: '00:00-03:00'
-      TransitEncryptionEnabled: !Ref TransitEncryption
+      TransitEncryptionEnabled: true
   Node1CPUUtilizationTooHighAlarm:
     Condition: HasAlertingModule
     Type: 'AWS::CloudWatch::Alarm'
