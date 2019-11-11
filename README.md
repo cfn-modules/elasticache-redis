@@ -31,6 +31,7 @@ Resources:
         KmsKeyModule: '' # optional
         EngineVersion: '5.0.5' # optional
         CacheNodeType: 'cache.t2.micro' # optional
+        TransitEncryption: 'true' # optional
         AuthToken: '' # optional
         SnapshotRetentionLimit: '35' # optional
         SnapshotName: '' # optional
@@ -108,8 +109,15 @@ none
       <td></td>
     </tr>
     <tr>
+      <td>TransitEncryption</td>
+      <td>Enable [encryption for data in transit](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html)?</td>
+      <td>true</td>
+      <td>no</td>
+      <td>[true, false]</td>
+    </tr>
+    <tr>
       <td>AuthToken</td>
-      <td>Password (16 to 128 characters) used to authenticate against Redis (leave blank to disable password-protection)</td>
+      <td>Password (16 to 128 characters) used to authenticate against Redis (requires TransitEncryption := true; leave blank to disable password-protection)</td>
       <td></td>
       <td>no</td>
       <td></td>

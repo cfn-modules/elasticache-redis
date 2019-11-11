@@ -44,8 +44,15 @@ Parameters:
     Description: 'The compute and memory capacity of the nodes in the node group (shard).'
     Type: 'String'
     Default: 'cache.t2.micro'
+  TransitEncryption:
+    Description: 'Enable encryption for data in transit? (see https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html)'
+    Type: 'String'
+    Default: 'true'
+    AllowedValues:
+    - 'true'
+    - 'false'
   AuthToken:
-    Description: 'Optional password (16 to 128 characters) used to authenticate against Redis (leave blank to disable password-protection).'
+    Description: 'Optional password (16 to 128 characters) used to authenticate against Redis (requires TransitEncryption := true; leave blank to disable password-protection).'
     Type: 'String'
     Default: ''
     MaxLength: 128
@@ -124,7 +131,7 @@ Resources:
       SnapshotName: !If [HasSnapshotName, !Ref SnapshotName, !Ref 'AWS::NoValue']
       SnapshotRetentionLimit: !Ref SnapshotRetentionLimit
       SnapshotWindow: '00:00-03:00'
-      TransitEncryptionEnabled: true
+      TransitEncryptionEnabled: !Ref TransitEncryption
   Node1CPUUtilizationTooHighAlarm:
     Condition: HasAlertingModule
     Type: 'AWS::CloudWatch::Alarm'
@@ -281,7 +288,7 @@ Outputs:
   ModuleId:
     Value: 'elasticache-redis'
   ModuleVersion:
-    Value: '0.1.0'
+    Value: '0.2.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
