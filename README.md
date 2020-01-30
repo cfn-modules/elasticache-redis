@@ -35,6 +35,8 @@ Resources:
         AuthToken: '' # optional
         SnapshotRetentionLimit: '35' # optional
         SnapshotName: '' # optional
+        NumShards: '1' # optional
+        NumReplicas: '1' # optional
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'
 ```
 
@@ -135,6 +137,20 @@ none
       <td></td>
       <td>no</td>
       <td></td>
+    </tr>
+    <tr>
+      <td>NumShards</td>
+      <td>Number of shards in the cluster.</td>
+      <td>1</td>
+      <td>no</td>
+      <td>[1-250]</td>
+    </tr>
+    <tr>
+      <td>NumReplicas</td>
+      <td>Number of replicas per shard.</td>
+      <td>1</td>
+      <td>no</td>
+      <td>[0-5]</td>
     </tr>
   </tbody>
 </table>
