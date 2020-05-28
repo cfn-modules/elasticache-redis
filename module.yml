@@ -84,6 +84,7 @@ Conditions:
   HasBastionModule: !Not [!Equals [!Ref BastionModule, '']]
   HasKmsKeyModule: !Not [!Equals [!Ref KmsKeyModule, '']]
   HasAuthToken: !Not [!Equals [!Ref AuthToken, '']]
+  HasTransitEncryption: !Equals [!Ref TransitEncryption, 'true']
   HasSnapshotName: !Not [!Equals [!Ref SnapshotName, '']]
   HasAutomaticFailoverEnabled: !Not [!Equals [!Ref NumReplicas, 0]]
 Mappings:
@@ -319,6 +320,6 @@ Outputs:
       Name: !Sub '${AWS::StackName}-DnsName'
   ConnectionUrl:
     Description: 'Connection URL can be used by clients to connect to Redis.'
-    Value: !If [HasAuthToken, !Sub 'rediss://:${AuthToken}@${ReplicationGroup.PrimaryEndPoint.Address}:${ReplicationGroup.PrimaryEndPoint.Port}', !Sub 'redis://${ReplicationGroup.PrimaryEndPoint.Address}:${ReplicationGroup.PrimaryEndPoint.Port}']
+    Value: !Join ['', [!If [HasTransitEncryption, 'rediss://', 'redis://'], !If [HasAuthToken, !Sub ':${AuthToken}@', ''], !Sub '${ReplicationGroup.PrimaryEndPoint.Address}:${ReplicationGroup.PrimaryEndPoint.Port}']]
     Export:
       Name: !Sub '${AWS::StackName}-ConnectionUrl'
