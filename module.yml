@@ -304,7 +304,7 @@ Outputs:
   ModuleId:
     Value: 'elasticache-redis'
   ModuleVersion:
-    Value: '1.0.0'
+    Value: '1.1.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
@@ -317,3 +317,8 @@ Outputs:
     Value: !GetAtt 'ReplicationGroup.PrimaryEndPoint.Address'
     Export:
       Name: !Sub '${AWS::StackName}-DnsName'
+  ConnectionUrl:
+    Description: 'Connection URL can be used by clients to connect to Redis.'
+    Value: !If [HasAuthToken, !Sub 'rediss://:${AuthToken}@${ReplicationGroup.PrimaryEndPoint.Address}:${ReplicationGroup.PrimaryEndPoint.Port}', !Sub 'redis://${ReplicationGroup.PrimaryEndPoint.Address}:${ReplicationGroup.PrimaryEndPoint.Port}']
+    Export:
+      Name: !Sub '${AWS::StackName}-ConnectionUrl'
