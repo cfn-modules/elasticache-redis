@@ -54,6 +54,7 @@ Parameters:
   AuthToken:
     Description: 'Optional password (16 to 128 characters) used to authenticate against Redis (requires TransitEncryption := true; leave blank to disable password-protection).'
     Type: 'String'
+    NoEcho: true
     Default: ''
     MaxLength: 128
   SnapshotRetentionLimit:
