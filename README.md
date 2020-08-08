@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/cfn-modules/elasticache-redis.svg?branch=master)](https://travis-ci.org/cfn-modules/elasticache-redis)
-[![NPM version](https://img.shields.io/npm/v/@cfn-modules/elasticache-redis.svg)](https://www.npmjs.com/package/@cfn-modules/elasticache-redis)
-
 # cfn-modules: ElastiCache redis
 
 ElastiCache redis cluster with secure firewall configuration, [encryption](https://www.npmjs.com/package/@cfn-modules/kms-key), multi AZ, backup enabled, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
