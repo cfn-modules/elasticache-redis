@@ -39,7 +39,8 @@ Parameters:
     Type: String
     Default: '5.0.5'
     AllowedValues: # aws elasticache describe-cache-engine-versions --engine redis --query "CacheEngineVersions[].EngineVersion"
-    - '5.0.5'
+    - '5.0.6'
+    - '6.2'
   CacheNodeType:
     Description: 'The compute and memory capacity of the nodes in the node group (shard).'
     Type: 'String'
@@ -88,8 +89,10 @@ Conditions:
   HasAutomaticFailoverEnabled: !Not [!Equals [!Ref NumReplicas, 0]]
 Mappings:
   EngineVersionMap:
-    '5.0.5':
+    '5.0.6':
       CacheParameterGroupFamily: 'redis5.0'
+    '6.2':
+      CacheParameterGroupFamily: 'redis6.x'
 Resources:
   CacheParameterGroup:
     Type: 'AWS::ElastiCache::ParameterGroup'
