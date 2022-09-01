@@ -96,13 +96,13 @@ none
     <tr>
       <td>EngineVersion</td>
       <td>Redis version</td>
-      <td>5.0.5</td>
+      <td>5.0.6</td>
       <td>no</td>
-      <td>[5.0.5]</td>
+      <td>[5.0.6,6.2]</td>
     </tr>
     <tr>
       <td>CacheNodeType</td>
-      <td>TThe compute and memory capacity of the nodes in the node group (shard)</td>
+      <td>The compute and memory capacity of the nodes in the node group (shard)</td>
       <td>cache.t2.micro</td>
       <td>no</td>
       <td></td>
