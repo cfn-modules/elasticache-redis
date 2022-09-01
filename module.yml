@@ -37,7 +37,7 @@ Parameters:
   EngineVersion:
     Description: 'Redis version'
     Type: String
-    Default: '5.0.5'
+    Default: '5.0.6'
     AllowedValues: # aws elasticache describe-cache-engine-versions --engine redis --query "CacheEngineVersions[].EngineVersion"
     - '5.0.6'
     - '6.2'
