@@ -37,8 +37,9 @@ Parameters:
   EngineVersion:
     Description: 'Redis version'
     Type: String
-    Default: '5.0.6'
+    Default: '5.0.5'
     AllowedValues: # aws elasticache describe-cache-engine-versions --engine redis --query "CacheEngineVersions[].EngineVersion"
+    - '5.0.5'
     - '5.0.6'
     - '6.2'
   CacheNodeType:
@@ -89,6 +90,8 @@ Conditions:
   HasAutomaticFailoverEnabled: !Not [!Equals [!Ref NumReplicas, 0]]
 Mappings:
   EngineVersionMap:
+    '5.0.5':
+      CacheParameterGroupFamily: 'redis5.0'
     '5.0.6':
       CacheParameterGroupFamily: 'redis5.0'
     '6.2':
