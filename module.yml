@@ -41,6 +41,7 @@ Parameters:
     AllowedValues: # aws elasticache describe-cache-engine-versions --engine redis --query "CacheEngineVersions[].EngineVersion"
     - '5.0.5'
     - '5.0.6'
+    - '6.0'
     - '6.2'
   CacheNodeType:
     Description: 'The compute and memory capacity of the nodes in the node group (shard).'
@@ -94,6 +95,8 @@ Mappings:
       CacheParameterGroupFamily: 'redis5.0'
     '5.0.6':
       CacheParameterGroupFamily: 'redis5.0'
+    '6.0':
+      CacheParameterGroupFamily: 'redis6.x'
     '6.2':
       CacheParameterGroupFamily: 'redis6.x'
 Resources:

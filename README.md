@@ -98,7 +98,7 @@ none
       <td>Redis version</td>
       <td>5.0.5</td>
       <td>no</td>
-      <td>[5.0.5,5.0.6,6.2]</td>
+      <td>[5.0.5,5.0.6,6.0,6.2]</td>
     </tr>
     <tr>
       <td>CacheNodeType</td>
