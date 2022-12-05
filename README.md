@@ -34,6 +34,7 @@ Resources:
         SnapshotName: '' # optional
         NumShards: '1' # optional
         NumReplicas: '1' # optional
+        CacheParameterGroupName: '' # optional
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'
 ```
 
@@ -148,6 +149,13 @@ none
       <td>1</td>
       <td>no</td>
       <td>[0-5]</td>
+    </tr>
+    <tr>
+      <td>CacheParameterGroupName</td>
+      <td>Name of a cache parameter group</td>
+      <td></td>
+      <td>no</td>
+      <td></td>
     </tr>
   </tbody>
 </table>
