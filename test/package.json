@@ -5,7 +5,7 @@
     "ava": "6.2.0",
     "@cfn-modules/test": "0.9.1",
     "@cfn-modules/elasticache-redis": "file:../",
-    "@cfn-modules/vpc": "2.1.0",
+    "@cfn-modules/vpc": "2.2.0",
     "@cfn-modules/client-sg": "1.0.0"
   },
   "scripts": {
