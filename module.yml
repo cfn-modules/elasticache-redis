@@ -105,9 +105,9 @@ Mappings:
     '6.2':
       CacheParameterGroupFamily: 'redis6.x'
     '7.0':
-      CacheParameterGroupFamily: 'redis7.x'
+      CacheParameterGroupFamily: 'redis7'
     '7.1':
-      CacheParameterGroupFamily: 'redis7.x'
+      CacheParameterGroupFamily: 'redis7'
 Resources:
   CacheParameterGroup:
     Condition: HasNotCacheParameterGroupName
