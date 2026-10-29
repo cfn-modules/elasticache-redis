@@ -1,6 +1,6 @@
 # cfn-modules: ElastiCache redis
 
-ElastiCache redis cluster with secure firewall configuration, [encryption](https://www.npmjs.com/package/@cfn-modules/kms-key), multi AZ, backup enabled, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
+ElastiCache redis or valkey cluster with secure firewall configuration, [encryption](https://www.npmjs.com/package/@cfn-modules/kms-key), multi AZ, backup enabled, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
 
 ## Install
 
@@ -26,7 +26,8 @@ Resources:
         AlertingModule: '' # optional
         BastionModule: '' # optional
         KmsKeyModule: '' # optional
-        EngineVersion: '5.0.5' # optional
+        Engine: 'redis' # optional
+        EngineVersion: '7.1' # optional
         CacheNodeType: 'cache.t2.micro' # optional
         TransitEncryption: 'true' # optional
         AuthToken: '' # optional
@@ -95,15 +96,22 @@ none
       <td></td>
     </tr>
     <tr>
-      <td>EngineVersion</td>
-      <td>Redis version</td>
-      <td>5.0.5</td>
+      <td>Engine</td>
+      <td>Cache engine</td>
+      <td>redis</td>
       <td>no</td>
-      <td>[5.0.5,5.0.6,6.0,6.2]</td>
+      <td>[redis, valkey]</td>
+    </tr>
+    <tr>
+      <td>EngineVersion</td>
+      <td>Engine version (must match Engine)</td>
+      <td>7.1</td>
+      <td>no</td>
+      <td>redis: [5.0.6, 6.0, 6.2, 7.0, 7.1]; valkey: [7.2, 8.0, 8.1, 8.2, 9.0, 9.1]</td>
     </tr>
     <tr>
       <td>CacheNodeType</td>
-      <td>The compute and memory capacity of the nodes in the node group (shard)</td>
+      <td>The compute and memory capacity of the nodes in the node group (shard); valkey does not support cache.t2.* node types</td>
       <td>cache.t2.micro</td>
       <td>no</td>
       <td></td>
@@ -117,7 +125,7 @@ none
     </tr>
     <tr>
       <td>AuthToken</td>
-      <td>Password (16 to 128 characters) used to authenticate against Redis (requires TransitEncryption := true; leave blank to disable password-protection)</td>
+      <td>Password (16 to 128 characters) used to authenticate against Redis/Valkey (requires TransitEncryption := true; leave blank to disable password-protection)</td>
       <td></td>
       <td>no</td>
       <td></td>

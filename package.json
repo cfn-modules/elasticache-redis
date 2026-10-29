@@ -1,7 +1,7 @@
 {
   "name": "@cfn-modules/elasticache-redis",
-  "version": "1.1.0",
-  "description": "ElastiCache redis cluster with secure firewall configuration, encryption, multi AZ, backup enabled, and alerting",
+  "version": "1.2.0",
+  "description": "ElastiCache redis/valkey cluster with secure firewall configuration, encryption, multi AZ, backup enabled, and alerting",
   "author": "Michael Wittig <michael@widdix.de>",
   "license": "Apache-2.0",
   "keywords": ["cfn-modules", "cfn-modules:ExposeName", "cfn-modules:ExposeDnsName"],

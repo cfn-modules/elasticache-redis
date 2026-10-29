@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'cfn-modules: ElastiCache redis'
+Description: 'cfn-modules: ElastiCache redis/valkey'
 # cfn-modules:implements(ExposeName, ExposeDnsName)
 Parameters:
   VpcModule:
@@ -34,18 +34,31 @@ Parameters:
     Description: 'Optional but recommended stack name of kms-key module (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
     Type: String
     Default: ''
+  Engine:
+    Description: 'Cache engine'
+    Type: String
+    Default: 'redis'
+    AllowedValues:
+    - 'redis'
+    - 'valkey'
   EngineVersion:
-    Description: 'Redis version'
+    Description: 'Engine version (redis: 5.0.6, 6.0, 6.2, 7.0, 7.1; valkey: 7.2, 8.0, 8.1, 8.2, 9.0, 9.1)'
     Type: String
     Default: '7.1'
-    AllowedValues: # aws elasticache describe-cache-engine-versions --engine redis --query "CacheEngineVersions[].EngineVersion"
+    AllowedValues: # union of all engines, see Rules and Mappings for per engine versions; aws elasticache describe-cache-engine-versions --engine [redis|valkey] --query "CacheEngineVersions[].EngineVersion"
     - '5.0.6'
     - '6.0'
     - '6.2'
     - '7.0'
     - '7.1'
+    - '7.2'
+    - '8.0'
+    - '8.1'
+    - '8.2'
+    - '9.0'
+    - '9.1'
   CacheNodeType:
-    Description: 'The compute and memory capacity of the nodes in the node group (shard).'
+    Description: 'The compute and memory capacity of the nodes in the node group (shard; valkey does not support cache.t2.* node types).'
     Type: 'String'
     Default: 'cache.t2.micro'
   TransitEncryption:
@@ -96,24 +109,47 @@ Conditions:
   HasAutomaticFailoverEnabled: !Not [!Equals [!Ref NumReplicas, 0]]
   HasCacheParameterGroupName: !Not [!Equals [!Ref CacheParameterGroupName, '']]
   HasNotCacheParameterGroupName: !Not [!Condition HasCacheParameterGroupName]
+Rules:
+  RedisEngineVersion:
+    RuleCondition: !Equals [!Ref Engine, 'redis']
+    Assertions:
+    - Assert: !Contains [['5.0.6', '6.0', '6.2', '7.0', '7.1'], !Ref EngineVersion]
+      AssertDescription: 'EngineVersion must be one of 5.0.6, 6.0, 6.2, 7.0, 7.1 for Engine redis'
+  ValkeyEngineVersion:
+    RuleCondition: !Equals [!Ref Engine, 'valkey']
+    Assertions:
+    - Assert: !Contains [['7.2', '8.0', '8.1', '8.2', '9.0', '9.1'], !Ref EngineVersion]
+      AssertDescription: 'EngineVersion must be one of 7.2, 8.0, 8.1, 8.2, 9.0, 9.1 for Engine valkey'
 Mappings:
-  EngineVersionMap:
+  EngineVersionMap: # EngineVersion -> Engine -> CacheParameterGroupFamily (second-level keys must be alphanumeric)
     '5.0.6':
-      CacheParameterGroupFamily: 'redis5.0'
+      redis: 'redis5.0'
     '6.0':
-      CacheParameterGroupFamily: 'redis6.x'
+      redis: 'redis6.x'
     '6.2':
-      CacheParameterGroupFamily: 'redis6.x'
+      redis: 'redis6.x'
     '7.0':
-      CacheParameterGroupFamily: 'redis7'
+      redis: 'redis7'
     '7.1':
-      CacheParameterGroupFamily: 'redis7'
+      redis: 'redis7'
+    '7.2':
+      valkey: 'valkey7'
+    '8.0':
+      valkey: 'valkey8'
+    '8.1':
+      valkey: 'valkey8'
+    '8.2':
+      valkey: 'valkey8'
+    '9.0':
+      valkey: 'valkey9'
+    '9.1':
+      valkey: 'valkey9'
 Resources:
   CacheParameterGroup:
     Condition: HasNotCacheParameterGroupName
     Type: 'AWS::ElastiCache::ParameterGroup'
     Properties:
-      CacheParameterGroupFamily: !FindInMap [EngineVersionMap, !Ref EngineVersion, CacheParameterGroupFamily]
+      CacheParameterGroupFamily: !FindInMap [EngineVersionMap, !Ref EngineVersion, !Ref Engine]
       Description: !Ref 'AWS::StackName'
       Properties: {}
   CacheSubnetGroupName:
@@ -152,7 +188,7 @@ Resources:
       CacheNodeType: !Ref CacheNodeType
       CacheParameterGroupName: !If [HasCacheParameterGroupName, !Ref CacheParameterGroupName, !Ref CacheParameterGroup]
       CacheSubnetGroupName: !Ref CacheSubnetGroupName
-      Engine: redis
+      Engine: !Ref Engine
       EngineVersion: !Ref EngineVersion
       KmsKeyId: !If [HasKmsKeyModule, {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}, !Ref 'AWS::NoValue']
       NotificationTopicArn: !If [HasAlertingModule, {'Fn::ImportValue': !Sub '${AlertingModule}-Arn'}, !Ref 'AWS::NoValue']
@@ -323,7 +359,7 @@ Outputs:
   ModuleId:
     Value: 'elasticache-redis'
   ModuleVersion:
-    Value: '1.1.0'
+    Value: '1.2.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
