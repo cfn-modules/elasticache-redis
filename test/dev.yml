@@ -25,4 +25,5 @@ Resources:
         ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName'
         NumShards: '1'
         NumReplicas: '0'
+        CacheNodeType: 'cache.t4g.micro'
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'

@@ -23,4 +23,5 @@ Resources:
       Parameters:
         VpcModule: !GetAtt 'Vpc.Outputs.StackName'
         ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName'
+        CacheNodeType: 'cache.t4g.micro'
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'

@@ -32,4 +32,5 @@ Resources:
         ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName'
         EngineVersion: '6.2'
         CacheParameterGroupName: !Ref CacheParameterGroup
+        CacheNodeType: 'cache.t4g.micro'
       TemplateURL: './node_modules/@cfn-modules/elasticache-redis/module.yml'
